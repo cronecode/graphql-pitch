@@ -22,20 +22,20 @@ Thoughts after the Apollo spike
 
 ![current](images/current_page_header_component.png)
 
-### The client wants to know
+# The client wants to know
 - Should I display the Create User Group button?
 
-### The business rule
+# The business rule
 - The Create User Group button should be displayed if the current user is allowed to create user groups.
 
-### The client needs to ask the server
+# The client needs to ask the server
 - Is the current user allowed to create user groups?
 
 ---
 
 ### What actually happens
 - `UserContainer` requests the current user from the server
-- Server response:
+- Payload:
 ```json
 {
   "allowedOperations": [
@@ -61,6 +61,18 @@ Thoughts after the Apollo spike
   "usesCompanyDefaultTimezone": false
 }
 ```
+
+---
+
+- `UserContainer` passes `currentUser` to `UserGroupPageHeader`
+- `UserGroupPageHeader` gets the User Group Management operation from the operation config file
+- `UserGroupPageHeader` passes `currentUser`and the operation to `ComponentAuthorization`
+- `ComponentAuthorization` passes `currentUser`and the operation to `StandardPolicy`
+- `StandardPolicy` iterates through `user.allowedOperations` and authorizes the component
+if `allowedOperations` contains the operation
+- `StandardPolicy` checks `user.role` and authorizes the component if 
+contains the User Group Management operation or if `currentUser` has the administrator role
+- ComponentAuthorization: if authorized, display the button; if not, hide it.
 
 ---
 
@@ -93,13 +105,7 @@ Thoughts after the Apollo spike
 
 ---
 
-- `UserContainer` passes `currentUser` to `UserGroupPageHeader`
-- `UserGroupPageHeader` gets the User Group Management operation from the operation config file
-- `UserGroupPageHeader` passes `currentUser`and the operation to `ComponentAuthorization`
-- `ComponentAuthorization` passes `currentUser`and the operation to `StandardPolicy`
-- `StandardPolicy` iterates through `user.allowedOperations` and authorizes the component
-if `allowedOperations` contains the operation
-- `StandardPolicy` checks `user.role` and authorizes the component if 
-contains the User Group Management operation or if `currentUser` has the administrator role
-- ComponentAuthorization: if authorized, display the button; if not, hide it.
+
+
+
 
