@@ -3,14 +3,14 @@
 Thoughts after the Apollo spike
 
 ---
-PAINS WITH REDUX
+##### PAINS WITH REDUX
 
 
 - Complexity
 - Boilerplate
 - Indirection
 ---
-PAINS WITH ~~REDUX~~ REST
+##### PAINS WITH ~~REDUX~~ REST
 
 
 - Complexity
@@ -20,22 +20,25 @@ PAINS WITH ~~REDUX~~ REST
 ![current](images/current_page_header_component.png)
 
 
-Should `UserGroupsPageHeader` display 
+Should `UserGroupsPageHeader` display
+
 the Create User Group button?
 
 ---
 
-THE BUSINESS RULE
+##### THE BUSINESS RULE
 
-The Create User Group button should be displayed if the current user is allowed to create user groups.
+The Create User Group button should be displayed 
+
+if the current user is allowed to create user groups.
 
 
-WHAT THE CLIENT WANTS TO ASK THE SERVER
+##### WHAT THE CLIENT WANTS TO ASK THE SERVER
 
 Is the current user allowed to create user groups?
 
 ---
-WHAT ACTUALLY HAPPENS
+##### WHAT ACTUALLY HAPPENS
 
 `UserContainer` requests the current user from the server...
 
@@ -47,8 +50,6 @@ WHAT ACTUALLY HAPPENS
     "user_management"
   ],
   "companyId": 1,
-  "companyName": "Nulogy",
-  "confirmed": true,
   "createdAt": "2017-08-16T03:15:20.821+05:30",
   "email": "qcloudmanager@nulogy.com",
   "id": 2,
@@ -59,16 +60,23 @@ WHAT ACTUALLY HAPPENS
   "userGroupId": 6
 }
 ```
+the [truncated] payload
+
 ---
 - `UserContainer` passes `currentUser` to `UserGroupPageHeader`
-- `UserGroupPageHeader` gets the User Group Management operation from the operation config file
-- `UserGroupPageHeader` passes `currentUser`and the operation to `ComponentAuthorization`
+- `UserGroupPageHeader` gets the User Group Management operation from the operation config
+
 ---
+- `UserGroupPageHeader` passes `currentUser`and the operation to `ComponentAuthorization`
 - `ComponentAuthorization` passes `currentUser`and the operation to `StandardPolicy`
-- `StandardPolicy` iterates through `user.allowedOperations` and authorizes the component
+
+---
+`StandardPolicy`:
+ - iterates through `user.allowedOperations` and authorizes
 if `allowedOperations` contains the operation
-- `StandardPolicy` checks `user.role` and authorizes the component if 
-contains the User Group Management operation or if `currentUser` has the administrator role
+- checks `user.role` and authorizes the component if the role
+is 'administrator'
+
 ---
 `ComponentAuthorization` displays the button if authorized and hides it if not.
 
@@ -80,8 +88,6 @@ contains the User Group Management operation or if `currentUser` has the adminis
     "user_management"
   ],
   "companyId": 1,
-  "companyName": "Nulogy",
-  "confirmed": true,
   "createdAt": "2017-08-16T03:15:20.821+05:30",
   "email": "qcloudmanager@nulogy.com",
   "id": 2,
@@ -92,7 +98,7 @@ contains the User Group Management operation or if `currentUser` has the adminis
   "userGroupId": 6
 }
 ```
-@[2-5, 16]
+@[2-5, 11]
 ---
 
 
