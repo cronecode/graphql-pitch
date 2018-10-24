@@ -100,6 +100,72 @@ is 'administrator'
 ```
 @[2-5, 11]
 ---
+What if...
+
+
+```json
+{
+  "allowedOperations": [
+    "review_sheets",
+    "user_management"
+  ],
+  "role": "manager"
+}
+```
+
+---
+
+```graphql
+query GetOperationsAndRole {
+    user {
+        allowedOperations,
+        role
+    }
+}
+
+```
+It's more efficient, but...
+
+---
+```graphql
+query GetOperationsAndRole {
+    user {
+        allowedOperations,
+        role
+    }
+}
+
+```
+It's more efficient, but...
+not good enough.
+
+---
+
+Computing complex logic on the client results
+in duplication, but more importantly,
+it means that we no longer have a single 
+source of truth for that logic.
+
+---
+
+"Is the current user allowed to create user groups?"
+
+We can't ask our REST API this question directly,
+and we can't fix this with client-side GraphQL alone.
+
+---
+
+"Is the current user allowed to create user groups?"
+
+```graphql
+query CanUserCreateUserGroups {
+    user {
+        canCreateUserGroups
+    }
+}
+```
+
+---
 
 
 
