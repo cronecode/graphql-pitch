@@ -20,23 +20,7 @@ Thoughts after the Apollo spike
 
 ---
 
-```javascript
-import ComponentAuthorization from '../../../../lib/ComponentAuthorization';
-import { operations } from '../../../../config/operation-config';
-
-
-const UserGroupPageHeader = ({ onCreateUserGroup, currentUser }) =>
-  <div>
-    <div>
-      <h1>User Groups</h1>
-    </div>
-    <div>
-      <ComponentAuthorization user={currentUser} operations={[operations.USER_GROUP_MANAGEMENT]} >
-        <button onClick={onCreateUserGroup}>Create User Group</button>
-      </ComponentAuthorization>
-    </div>
-  </div>;
-```
+![current](images/current_page_header_component.png)
 
 ### The client wants to know
 - Should I display the Create User Group button?
@@ -54,16 +38,58 @@ const UserGroupPageHeader = ({ onCreateUserGroup, currentUser }) =>
 - Server response:
 ```json
 {
-  "user": {
-    "id": 1,
-    "name": "Barb",
-    "email": "barb@test.com",
-    "userGroupId": 30,
-    // ... a bunch of other crap
-    "allowedOperations": [...]
-  }
+  "allowedOperations": [
+    "review_sheets",
+    "user_management"
+  ],
+  "companyId": 1,
+  "companyName": "Nulogy",
+  "confirmed": true,
+  "createdAt": "2017-08-16T03:15:20.821+05:30",
+  "email": "qcloudmanager@nulogy.com",
+  "enabled": true,
+  "hasCustomUserGroups": true,
+  "id": 2,
+  "lastSignInAt": "2018-10-24T22:56:34.359+05:30",
+  "name": "QCloud Manager",
+  "role": "manager",
+  "state": null,
+  "timeZone": "Sri Jayawardenepura",
+  "updatedAt": "2018-10-25T00:50:45.250+05:30",
+  "userGroupId": 6,
+  "userGroupName": "Manager",
+  "usesCompanyDefaultTimezone": false
 }
 ```
+
+---
+
+```json
+{
+  "allowedOperations": [
+    "review_sheets",
+    "user_management"
+  ],
+  "companyId": 1,
+  "companyName": "Nulogy",
+  "confirmed": true,
+  "createdAt": "2017-08-16T03:15:20.821+05:30",
+  "email": "qcloudmanager@nulogy.com",
+  "enabled": true,
+  "hasCustomUserGroups": true,
+  "id": 2,
+  "lastSignInAt": "2018-10-24T22:56:34.359+05:30",
+  "name": "QCloud Manager",
+  "role": "manager",
+  "state": null,
+  "timeZone": "Sri Jayawardenepura",
+  "updatedAt": "2018-10-25T00:50:45.250+05:30",
+  "userGroupId": 6,
+  "userGroupName": "Manager",
+  "usesCompanyDefaultTimezone": false
+}
+```
+@[2-5, 16]
 
 ---
 
