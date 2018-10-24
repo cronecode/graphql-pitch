@@ -38,15 +38,20 @@ const UserGroupPageHeader = ({ onCreateUserGroup, currentUser }) =>
   </div>;
 ```
 
+### The client wants to know
+- Should I display the Create User Group button?
+
+### The business rule
+- The Create User Group button should be displayed if the current user is allowed to create user groups.
+
+### The client needs to ask the server
+- Is the current user allowed to create user groups?
+
 ---
 
-### What the client wants to know:
-- Is the current user allowed to manage user groups?
-
----
-
-### What the client needs to do:
-- UserContainer: get the current user from the server:
+### What actually happens
+- `UserContainer` requests the current user from the server
+- Server response:
 ```json
 {
   "user": {
@@ -59,11 +64,16 @@ const UserGroupPageHeader = ({ onCreateUserGroup, currentUser }) =>
   }
 }
 ```
-- UserContainer: pass `currentUser` to UserGroupPageHeader
-- UserGroupPageHeader: get the User Group Management operation from the operation config file
-- UserGroupPageHeader: pass `currentUser`and the operation to ComponentAuthorization
-- ComponentAuthorization: pass `currentUser`and operation to StandardPolicy
-- StandardPolicy: Iterate through `user.allowedOperations` and check `user.role`; authorize if `allowedOperations`
+
+---
+
+- `UserContainer` passes `currentUser` to `UserGroupPageHeader`
+- `UserGroupPageHeader` gets the User Group Management operation from the operation config file
+- `UserGroupPageHeader` passes `currentUser`and the operation to `ComponentAuthorization`
+- `ComponentAuthorization` passes `currentUser`and the operation to `StandardPolicy`
+- `StandardPolicy` iterates through `user.allowedOperations` and authorizes the component
+if `allowedOperations` contains the operation
+- `StandardPolicy` checks `user.role` and authorizes the component if 
 contains the User Group Management operation or if `currentUser` has the administrator role
 - ComponentAuthorization: if authorized, display the button; if not, hide it.
 
