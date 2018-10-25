@@ -3,14 +3,14 @@
 Thoughts after the Apollo spike
 
 ---
-##### PAINS WITH REDUX
+#### PAINS WITH REDUX
 
 
 - Complexity
 - Boilerplate
 - Indirection
 ---
-##### PAINS WITH ~~REDUX~~ REST
+#### PAINS WITH ~~REDUX~~ REST
 
 
 - Complexity
@@ -26,21 +26,27 @@ the Create User Group button?
 
 ---
 
-##### THE BUSINESS RULE
+#### THE BUSINESS RULE
 
 The Create User Group button should be displayed 
 
 if the current user is allowed to create user groups.
 
 
-##### WHAT THE CLIENT WANTS TO ASK THE SERVER
+#### WHAT THE CLIENT WANTS TO ASK THE SERVER
 
 Is the current user allowed to create user groups?
 
 ---
-##### WHAT ACTUALLY HAPPENS
+#### WHAT ACTUALLY HAPPENS
 
-`UserContainer` requests the current user from the server...
+---
+
+#### #1
+
+`UserContainer`
+
+requests the current user from the server.
 
 ---
 ```json
@@ -63,22 +69,54 @@ Is the current user allowed to create user groups?
 the [truncated] payload
 
 ---
-- `UserContainer` passes `currentUser` to `UserGroupPageHeader`
-- `UserGroupPageHeader` gets the User Group Management operation from the operation config
+#### #2
+`UserContainer`
+
+passes `currentUser` 
+to `UserGroupPageHeader`.
 
 ---
-- `UserGroupPageHeader` passes `currentUser`and the operation to `ComponentAuthorization`
-- `ComponentAuthorization` passes `currentUser`and the operation to `StandardPolicy`
+#### #3
+`UserGroupPageHeader` 
+
+gets the User Group Management 
+operation from the operation config.
 
 ---
-`StandardPolicy`:
- - iterates through `user.allowedOperations` and authorizes
-if `allowedOperations` contains the operation
-- checks `user.role` and authorizes the component if the role
-is 'administrator'
+#### #4
+`UserGroupPageHeader` 
+
+passes `currentUser`
+and the operation to `ComponentAuthorization`.
 
 ---
-`ComponentAuthorization` displays the button if authorized and hides it if not.
+
+#### #5
+`ComponentAuthorization` 
+
+passes `currentUser`
+and the operation to `StandardPolicy`.
+
+---
+
+#### #6
+`StandardPolicy`
+
+iterates through `user.allowedOperations` and 
+authorizes if `allowedOperations` contains the operation.
+
+---
+#### #7
+`StandardPolicy`
+
+checks `user.role` and authorizes the component 
+if the role is 'administrator'.
+
+---
+#### #8
+`ComponentAuthorization`
+
+displays the button if authorized and hides it if not.
 
 ---
 ```json
@@ -141,10 +179,8 @@ not good enough.
 
 ---
 
-Computing complex logic on the client results
-in duplication, but more importantly,
-it means that we no longer have a single 
-source of truth for that logic.
+The client still needs to know how to take `allowedOperations`
+and `role` and compute the answer to its question.
 
 ---
 
