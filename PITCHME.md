@@ -3,19 +3,19 @@
 Thoughts after the Apollo spike
 
 ---
-#### PAINS WITH REDUX
+### PAINS WITH REDUX
 
 
 - Complexity
 - Boilerplate
 - Indirection
 ---
-#### PAINS WITH ~~REDUX~~ REST
+### PAINS WITH ~~REDUX~~ REST
 
 
-- Complexity
-- Boilerplate
-- **Indirection**
+- ~~Complexity~~
+- ~~Boilerplate~~
+- Indirection
 ---
 ![current](images/current_page_header_component.png)
 
@@ -26,23 +26,25 @@ the Create User Group button?
 
 ---
 
-#### THE BUSINESS RULE
+### THE BUSINESS RULE
 
 The Create User Group button should be displayed 
 
 if the current user is allowed to create user groups.
 
+---
 
-#### WHAT THE CLIENT WANTS TO ASK THE SERVER
+
+### WHAT THE CLIENT WANTS TO ASK THE SERVER
 
 Is the current user allowed to create user groups?
 
 ---
-#### WHAT ACTUALLY HAPPENS
+### WHAT ACTUALLY HAPPENS
 
 ---
 
-#### #1
+### #1
 
 `UserContainer`
 
@@ -69,21 +71,21 @@ requests the current user from the server.
 the [truncated] payload
 
 ---
-#### #2
+### #2
 `UserContainer`
 
 passes `currentUser` 
 to `UserGroupPageHeader`.
 
 ---
-#### #3
+### #3
 `UserGroupPageHeader` 
 
 gets the User Group Management 
 operation from the operation config.
 
 ---
-#### #4
+### #4
 `UserGroupPageHeader` 
 
 passes `currentUser`
@@ -91,7 +93,7 @@ and the operation to `ComponentAuthorization`.
 
 ---
 
-#### #5
+### #5
 `ComponentAuthorization` 
 
 passes `currentUser`
@@ -99,21 +101,21 @@ and the operation to `StandardPolicy`.
 
 ---
 
-#### #6
+### #6
 `StandardPolicy`
 
 iterates through `user.allowedOperations` and 
 authorizes if `allowedOperations` contains the operation.
 
 ---
-#### #7
+### #7
 `StandardPolicy`
 
 checks `user.role` and authorizes the component 
 if the role is 'administrator'.
 
 ---
-#### #8
+### #8
 `ComponentAuthorization`
 
 displays the button if authorized and hides it if not.
@@ -200,9 +202,40 @@ query CanUserCreateUserGroups {
     }
 }
 ```
+---
+
+![alt](images/alt_page_header.png)
 
 ---
 
+### #1
+
+`UserGroupsPageHeader`
+
+asks the server whether the current user
+can create user groups.
+
+---
+
+```json
+{
+  "user": {
+    "canCreateUserGroups": true
+  }
+}
+
+```
+the [full] payload
+
+---
+
+### #2
+
+`UserGroupsPageHeader`
+
+displays the button if the current user
+can create user groups and
+hides it if not.
 
 
 
