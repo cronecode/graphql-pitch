@@ -74,21 +74,24 @@ the [truncated] payload
 ### #2
 `UserContainer`
 
-passes `currentUser` 
+passes `currentUser`
+
 to `UserGroupPageHeader`.
 
 ---
 ### #3
 `UserGroupPageHeader` 
 
-gets the User Group Management 
-operation from the operation config.
+gets the User Group Management operation 
+
+from the operation config.
 
 ---
 ### #4
 `UserGroupPageHeader` 
 
 passes `currentUser`
+
 and the operation to `ComponentAuthorization`.
 
 ---
@@ -97,6 +100,7 @@ and the operation to `ComponentAuthorization`.
 `ComponentAuthorization` 
 
 passes `currentUser`
+
 and the operation to `StandardPolicy`.
 
 ---
@@ -104,21 +108,30 @@ and the operation to `StandardPolicy`.
 ### #6
 `StandardPolicy`
 
-iterates through `user.allowedOperations` and 
-authorizes if `allowedOperations` contains the operation.
+iterates through `user.allowedOperations`
+
+and authorizes if `allowedOperations`
+
+contains the operation.
 
 ---
 ### #7
 `StandardPolicy`
 
-checks `user.role` and authorizes the component 
+checks `user.role` 
+
+and authorizes the component 
+
+
 if the role is 'administrator'.
 
 ---
 ### #8
 `ComponentAuthorization`
 
-displays the button if authorized and hides it if not.
+displays the button if authorized 
+
+and hides it if not.
 
 ---
 ```json
@@ -177,19 +190,20 @@ query GetOperationsAndRole {
 
 ```
 It's more efficient, but...
+
+
 not good enough.
 
 ---
 
-The client still needs to know how to take `allowedOperations`
-and `role` and compute the answer to its question.
+*The client still needs to know how to take `allowedOperations`*
+
+
+*and `role` and compute the answer to its question.*
 
 ---
 
 "Is the current user allowed to create user groups?"
-
-We can't ask our REST API this question directly,
-and we can't fix this with client-side GraphQL alone.
 
 ---
 
@@ -213,6 +227,7 @@ query CanUserCreateUserGroups {
 `UserGroupsPageHeader`
 
 asks the server whether the current user
+
 can create user groups.
 
 ---
@@ -234,8 +249,8 @@ the [full] payload
 `UserGroupsPageHeader`
 
 displays the button if the current user
-can create user groups and
-hides it if not.
+
+can create user groups and hides it if not.
 
 
 
