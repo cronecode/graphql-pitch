@@ -48,6 +48,7 @@ Is the current user allowed to create user groups?
 
 `UserContainer`
 
+
 requests the current user from the server.
 
 ---
@@ -74,6 +75,7 @@ the [truncated] payload
 ### #2
 `UserContainer`
 
+
 passes `currentUser`
 
 to `UserGroupPageHeader`.
@@ -82,13 +84,15 @@ to `UserGroupPageHeader`.
 ### #3
 `UserGroupPageHeader` 
 
-gets the User Group Management operation 
 
-from the operation config.
+gets the User Group Management 
+
+operation from the operation config.
 
 ---
 ### #4
 `UserGroupPageHeader` 
+
 
 passes `currentUser`
 
@@ -99,7 +103,8 @@ and the operation to `ComponentAuthorization`.
 ### #5
 `ComponentAuthorization` 
 
-passes `currentUser`
+
+passes `currentUser` 
 
 and the operation to `StandardPolicy`.
 
@@ -108,26 +113,28 @@ and the operation to `StandardPolicy`.
 ### #6
 `StandardPolicy`
 
+
 iterates through `user.allowedOperations`
 
-and authorizes if `allowedOperations`
+and authorizes the component if
 
-contains the operation.
+the array contains the operation.
 
 ---
 ### #7
 `StandardPolicy`
 
+
 checks `user.role` 
 
-and authorizes the component 
+and authorizes the component
 
-
-if the role is 'administrator'.
+if the user is an administrator.
 
 ---
 ### #8
 `ComponentAuthorization`
+
 
 displays the button if authorized 
 
@@ -170,10 +177,10 @@ What if...
 
 ```graphql
 query GetOperationsAndRole {
-    user {
-        allowedOperations,
-        role
-    }
+  user {
+    allowedOperations,
+    role
+  }
 }
 
 ```
@@ -182,10 +189,10 @@ It's more efficient, but...
 ---
 ```graphql
 query GetOperationsAndRole {
-    user {
-        allowedOperations,
-        role
-    }
+  user {
+    allowedOperations,
+    role
+  }
 }
 
 ```
@@ -196,24 +203,22 @@ not good enough.
 
 ---
 
-*The client still needs to know how to take `allowedOperations`*
+*The client still needs to know how to take* `allowedOperations`
 
 
-*and `role` and compute the answer to its question.*
-
----
-
-"Is the current user allowed to create user groups?"
+*and* `role` *and compute the answer to its question.*
 
 ---
 
 "Is the current user allowed to create user groups?"
+
+---
 
 ```graphql
 query CanUserCreateUserGroups {
-    user {
-        canCreateUserGroups
-    }
+  user {
+    canCreateUserGroups
+  }
 }
 ```
 ---
@@ -225,6 +230,7 @@ query CanUserCreateUserGroups {
 ### #1
 
 `UserGroupsPageHeader`
+
 
 asks the server whether the current user
 
@@ -248,9 +254,55 @@ the [full] payload
 
 `UserGroupsPageHeader`
 
+
 displays the button if the current user
 
 can create user groups and hides it if not.
+
+
+---
+
+![altalt](images/alt_alt_page_header.png)
+
+---
+
+```graphql schema
+type User {
+  id: ID!
+  name: String
+  email: String!
+  canCreateUserGroups: Bool!
+  userGroupId: ID
+}
+
+```
+@[6]
+
+---
+
+```graphql schema
+type User {
+  id: ID!
+  name: String
+  email: String
+  canCreateUserGroups: Bool!
+  userGroup: UserGroup
+}
+```
+
+---
+
+```graphql
+query UserGroupId($id: ID!) {
+  user(id: $id) {
+    userGroup {
+        id
+    }
+  }
+}
+```
+
+
 
 
 
