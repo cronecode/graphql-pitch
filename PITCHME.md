@@ -203,10 +203,11 @@ not good enough.
 
 ---
 
-*The client still needs to know how to take* `allowedOperations`
+*The client still needs to know how to take* 
 
+`allowedOperations` *and* `role` 
 
-*and* `role` *and compute the answer to its question.*
+*and compute the answer to its question.*
 
 ---
 
@@ -266,7 +267,7 @@ can create user groups and hides it if not.
 
 ---
 
-```graphql schema
+```graphql
 type User {
   id: ID!
   name: String
@@ -280,7 +281,7 @@ type User {
 
 ---
 
-```graphql schema
+```graphql
 type User {
   id: ID!
   name: String
@@ -300,6 +301,53 @@ query UserGroupId($id: ID!) {
     }
   }
 }
+```
+
+---
+
+What about Apollo?
+
+---
+
+The Apollo Client cache attempts to normalize data
+before saving it to the store by splitting responses
+into individual objects according to their unique IDs.
+
+---
+
+```graphql
+{
+  user {
+    id
+    userGroup {
+      id
+    }
+  }
+}
+```
+
+---
+```graphql
+{
+  user {
+    id
+  }
+  userGroup {
+    id
+  }
+}
+```
+
+---
+```graphql
+  mutation DisableUserGroup($id: ID!) {
+    disableUserGroup(id: $id) {
+      userGroup {
+          id
+          enabled
+      }
+    }
+  }
 ```
 
 
