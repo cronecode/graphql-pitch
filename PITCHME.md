@@ -184,6 +184,18 @@ query GetOperationsAndRole {
 }
 
 ```
+
+---
+
+```graphql
+query GetOperationsAndRole {
+  user {
+    allowedOperations,
+    role
+  }
+}
+
+```
 It's more efficient, but...
 
 ---
@@ -203,15 +215,24 @@ not good enough.
 
 ---
 
-*The client still needs to know how to take* 
-
-`allowedOperations` *and* `role` 
-
-*and compute the answer to its question.*
+"Is the current user allowed to create user groups?"
 
 ---
 
-"Is the current user allowed to create user groups?"
+*By asking the client to derive permissions*
+
+*from a user's operations and role, we no longer*
+
+*have a single source of truth for authorization.*
+
+---
+
+### A DIFFERENT PHILOSOPHY
+
+
+Our API can and should provide
+
+business logic, not just data.
 
 ---
 
@@ -260,11 +281,6 @@ displays the button if the current user
 
 can create user groups and hides it if not.
 
-
----
-
-![altalt](images/alt_alt_page_header.png)
-
 ---
 
 ```graphql
@@ -297,7 +313,7 @@ type User {
 query UserGroupId($id: ID!) {
   user(id: $id) {
     userGroup {
-        id
+      id
     }
   }
 }
@@ -308,9 +324,23 @@ query UserGroupId($id: ID!) {
 What about Apollo?
 
 ---
+```
+<ApolloProvider>
+
+
+<Query>
+
+
+<Mutation>
+
+```
+
+---
 
 The Apollo Client cache attempts to normalize data
+
 before saving it to the store by splitting responses
+
 into individual objects according to their unique IDs.
 
 ---
@@ -343,12 +373,16 @@ into individual objects according to their unique IDs.
   mutation DisableUserGroup($id: ID!) {
     disableUserGroup(id: $id) {
       userGroup {
-          id
-          enabled
+        id
+        enabled
       }
     }
   }
 ```
+
+---
+
+### the end?
 
 
 
